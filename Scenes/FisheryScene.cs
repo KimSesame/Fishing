@@ -15,6 +15,11 @@
             game.player.Position.X = 24;
             game.player.Position.Y = 19;
             game.player.Rprsn = '▲';
+
+            RefreshFishery();
+            GenerateWave(20);
+            GenerateWall();
+            GenerateFish();
         }
 
         public override void Input()
@@ -25,15 +30,6 @@
         public override void Render()
         {
             Console.Clear();
-
-            // Refresh fishery if fish is NOT exist
-            if (game.fish == null)
-            {
-                RefreshFishery();
-                GenerateWave(20);
-                GenerateWall();
-                GenerateFish();
-            }
 
             PrintFishery();
             PrintFish();
