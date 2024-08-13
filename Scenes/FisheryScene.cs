@@ -1,20 +1,11 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Fishing.Scenes
+﻿namespace Fishing.Scenes
 {
-    public struct Point
-    {
-        public int x;
-        public int y;
-    }
-
     public class FisheryScene : Scene
     {
         public bool fishExist;
 
         public FisheryTile[,] fishery;
         public Point fishPos;
-        public Point playerPos;
 
         const int FISHERY_WIDTH = 17;
         const int FISHERY_HEIGHT = 15;
@@ -23,11 +14,11 @@ namespace Fishing.Scenes
 
         public override void Enter()
         {
-
             fishExist = false;
             fishery = new FisheryTile[FISHERY_HEIGHT, FISHERY_WIDTH];
-            playerPos = new Point() { x = 24, y = 19 };
-            
+            game.player.Position.X = 24;
+            game.player.Position.Y = 19;
+            game.player.Rprsn = '▲';
         }
 
         public override void Input()
@@ -51,7 +42,7 @@ namespace Fishing.Scenes
             PrintFishery();
             PrintFish();
             PrintPlayer();
-            PrintScore();
+            game.PrintScore();
         }
 
         public override void Update()
@@ -73,7 +64,7 @@ namespace Fishing.Scenes
             int x = Util.MakeRandomInt(1, FISHERY_WIDTH - 1);
             int y = Util.MakeRandomInt(1, FISHERY_HEIGHT - 2);
 
-            fishPos = new Point() { x = 2 * x + 8, y = y + 3 };
+            fishPos = new Point(2 * x + 8, y + 3);
             fishExist = true;
         }
 
@@ -141,7 +132,7 @@ namespace Fishing.Scenes
 
         private void PrintFish(bool fishing = false)
         {
-            Console.SetCursorPosition(fishPos.x, fishPos.y);
+            Console.SetCursorPosition(fishPos.X, fishPos.Y);
             Console.ForegroundColor = (fishing) ? ConsoleColor.Yellow : ConsoleColor.DarkRed;
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.Write("★");
@@ -150,16 +141,10 @@ namespace Fishing.Scenes
 
         private void PrintPlayer()
         {
-            Console.SetCursorPosition(playerPos.x, playerPos.y);
+            Console.SetCursorPosition(game.player.Position.X, game.player.Position.Y);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("▲");
+            Console.Write(game.player.Rprsn);
             Console.ResetColor();
-        }
-
-        private void PrintScore()
-        {
-            Console.SetCursorPosition(0, 25);
-            Console.Write($"Score: {game.score}");
         }
 
         private void Move()
@@ -187,29 +172,29 @@ namespace Fishing.Scenes
 
         private void MoveLeft()
         {
-            Point next = new Point() { x = playerPos.x - 2, y = playerPos.y };
+            Point next = new Point(game.player.Position.X - 2, game.player.Position.Y);
          
-            if (next.x > 8)
-                playerPos = next;
+            if (next.X > 8)
+                game.player.Position= next;
         }
 
         private void MoveRight()
         {
-            Point next = new Point() { x = playerPos.x + 2, y = playerPos.y };
+            Point next = new Point(game.player.Position.X + 2, game.player.Position.Y);
          
-            if (next.x < 40)
-                playerPos = next;
+            if (next.X < 40)
+                game.player.Position= next;
         }
 
         private bool IsFishColumn()
         {
-            return playerPos.x == fishPos.x;
+            return game.player.Position.X == fishPos.X;
         }
 
         private void ThrowRod()
         {
-            int x = playerPos.x;
-            int y = playerPos.y - 1;
+            int x = game.player.Position.X;
+            int y = game.player.Position.Y - 1;
 
             Console.ForegroundColor = ConsoleColor.DarkRed;
 
@@ -217,7 +202,7 @@ namespace Fishing.Scenes
             if (!IsFishColumn())
             {
                 // Print effect(?)
-                Console.SetCursorPosition(x + 2, playerPos.y);
+                Console.SetCursorPosition(x + 2, game.player.Position.Y);
                 Console.Write("?");
                 Console.Beep(500, 500);
                 Console.ResetColor();
@@ -226,7 +211,7 @@ namespace Fishing.Scenes
 
             // Fish bite!
             // Print effect(!)
-            Console.SetCursorPosition(x + 2, playerPos.y);
+            Console.SetCursorPosition(x + 2, game.player.Position.Y);
             Console.Write("!");
 
             // Rod at ground
@@ -241,7 +226,7 @@ namespace Fishing.Scenes
 
             // Rod at water
             Console.BackgroundColor = ConsoleColor.Blue;
-            for (; y > fishPos.y + 1; y--)
+            for (; y > fishPos.Y + 1; y--)
             {
                 Console.SetCursorPosition(x, y);
                 Console.Write("∥");

@@ -9,11 +9,17 @@ namespace Fishing
         public bool running;
         public int score;
         public ConsoleKey inputKey;
+        public Player player;
 
         private Scene[] scenes;
         private Scene curScene;
 
         public Scene CurScene { get { return curScene; } }
+
+        public Game()
+        {
+            player = new Player();
+        }
 
         public void Run()
         {
@@ -38,6 +44,12 @@ namespace Fishing
         {
             Console.Clear();
             running = false;
+        }
+
+        public void PrintScore()
+        {
+            Console.SetCursorPosition(0, 25);
+            Console.Write($"Score: {game.score}");
         }
 
         private void Start()

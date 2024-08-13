@@ -1,12 +1,8 @@
-﻿using System.Reflection;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Fishing.Scenes
+﻿namespace Fishing.Scenes
 {
     public struct FishBar
     {
         public bool[] bar;
-        public Point barPointerPos;
         public int green;
         public int barCount;
         public int target;
@@ -23,9 +19,11 @@ namespace Fishing.Scenes
             fishBar = new FishBar();
 
             fishBar.bar = new bool[22];
-            fishBar.barPointerPos = new Point() { x = 24, y = 26 };
             fishBar.barCount = 0;
             fishBar.target = Util.MakeRandomInt(3, 6);
+            game.player.Position.X = 24;
+            game.player.Position.Y = 26;
+            game.player.Rprsn = '▼';
         }
 
         public override void Input()
@@ -77,27 +75,27 @@ namespace Fishing.Scenes
 
         private void MoveLeft()
         {
-            Point next = new Point() { x = fishBar.barPointerPos.x - 2, y = fishBar.barPointerPos.y };
-            if (next.x > 0)
+            Point next = new Point(game.player.Position.X - 2, game.player.Position.Y);
+            if (next.X > 0)
             {
-                fishBar.barPointerPos = next;
+                game.player.Position = next;
                 IsInGreen(true);
             }
         }
 
         private void MoveRight()
         {
-            Point next = new Point() { x = fishBar.barPointerPos.x + 2, y = fishBar.barPointerPos.y };
-            if (next.x < 48)
+            Point next = new Point(game.player.Position.X + 2, game.player.Position.Y);
+            if (next.X < 48)
             {
-                fishBar.barPointerPos = next;
+                game.player.Position = next;
                 IsInGreen(true);
             }
         }
 
         private bool IsInGreen(bool cntMode = false)
         {
-            int barX = fishBar.barPointerPos.x;
+            int barX = game.player.Position.X;
             int greenX = 2 * fishBar.green + 2;
 
             if (barX < greenX || barX > greenX + 3)
@@ -162,10 +160,10 @@ namespace Fishing.Scenes
 
         private void PrintBarPointer()
         {
-            Console.SetCursorPosition(fishBar.barPointerPos.x, fishBar.barPointerPos.y);
+            Console.SetCursorPosition(game.player.Position.X, game.player.Position.Y);
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write("▼");
+            Console.Write(game.player.Rprsn);
             Console.ResetColor();
         }
 
