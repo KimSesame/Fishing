@@ -5,11 +5,12 @@
         public bool[] bar;
         public int green;
         public int barCount;
-        public int target;
     }
 
     public class FishingScene : Scene
     {
+        public event Action OnFishCaught;
+
         public FishBar fishBar;
 
         public override void Exit() { }
@@ -20,7 +21,6 @@
 
             fishBar.bar = new bool[22];
             fishBar.barCount = 0;
-            fishBar.target = Util.MakeRandomInt(3, 6);
             game.player.Position.X = 24;
             game.player.Position.Y = 26;
             game.player.Rprsn = '▼';
@@ -169,9 +169,9 @@
 
         private void CheckFishingEnd()
         {
-            if (fishBar.barCount == fishBar.target)
+            if (fishBar.barCount == game.fish.Patience)
             {
-                game.score++;
+                OnFishCaught?.Invoke();
                 game.ChangeScene(SceneType.Fishery);
             }
         }

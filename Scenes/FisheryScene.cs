@@ -2,19 +2,15 @@
 {
     public class FisheryScene : Scene
     {
-        public bool fishExist;
-
-        public FisheryTile[,] fishery;
-        public Point fishPos;
-
         const int FISHERY_WIDTH = 17;
         const int FISHERY_HEIGHT = 15;
+
+        private FisheryTile[,] fishery;
 
         public override void Exit() { }
 
         public override void Enter()
         {
-            fishExist = false;
             fishery = new FisheryTile[FISHERY_HEIGHT, FISHERY_WIDTH];
             game.player.Position.X = 24;
             game.player.Position.Y = 19;
@@ -31,7 +27,7 @@
             Console.Clear();
 
             // Refresh fishery if fish is NOT exist
-            if (!fishExist)
+            if (game.fish == null)
             {
                 RefreshFishery();
                 GenerateWave(20);
@@ -50,6 +46,12 @@
             Move();
         }
 
+        public void CatchFish()
+        {
+            game.score++;
+            game.fish = null;
+        }
+
         private void RefreshFishery()
         {
             for (int i = 0; i < FISHERY_HEIGHT; i++)
@@ -64,8 +66,7 @@
             int x = Util.MakeRandomInt(1, FISHERY_WIDTH - 1);
             int y = Util.MakeRandomInt(1, FISHERY_HEIGHT - 2);
 
-            fishPos = new Point(2 * x + 8, y + 3);
-            fishExist = true;
+            game.fish = new Fish(2 * x + 8, y + 3);
         }
 
         private void GenerateWave(int n)
@@ -132,10 +133,10 @@
 
         private void PrintFish(bool fishing = false)
         {
-            Console.SetCursorPosition(fishPos.X, fishPos.Y);
+            Console.SetCursorPosition(game.fish.Position.X, game.fish.Position.Y);
             Console.ForegroundColor = (fishing) ? ConsoleColor.Yellow : ConsoleColor.DarkRed;
             Console.BackgroundColor = ConsoleColor.Blue;
-            Console.Write("★");
+            Console.Write(game.fish.Rprsn);
             Console.ResetColor();
         }
 
@@ -188,7 +189,7 @@
 
         private bool IsFishColumn()
         {
-            return game.player.Position.X == fishPos.X;
+            return game.player.Position.X == game.fish.Position.X;
         }
 
         private void ThrowRod()
@@ -226,7 +227,7 @@
 
             // Rod at water
             Console.BackgroundColor = ConsoleColor.Blue;
-            for (; y > fishPos.Y + 1; y--)
+            for (; y > game.fish.Position.Y + 1; y--)
             {
                 Console.SetCursorPosition(x, y);
                 Console.Write("∥");

@@ -10,6 +10,7 @@ namespace Fishing
         public int score;
         public ConsoleKey inputKey;
         public Player player;
+        public Fish fish;
 
         private Scene[] scenes;
         private Scene curScene;
@@ -67,7 +68,10 @@ namespace Fishing
             scenes[(int)SceneType.Title] = new TitleScene();
             scenes[(int)SceneType.Fishery] = new FisheryScene();
             scenes[(int)SceneType.Fishing] = new FishingScene();
-            
+
+            // Subscribe events
+            (scenes[(int)SceneType.Fishing] as FishingScene).OnFishCaught += (scenes[(int)SceneType.Fishery] as FisheryScene).CatchFish;
+
             curScene = scenes[(int)SceneType.Title];
             curScene.Enter();
         }
