@@ -8,7 +8,9 @@
         {
             list =
             [
-                new ScoreAchievement(),
+                new ScoreAchievement(10),
+                new ScoreAchievement(100),
+                new ScoreAchievement(1000),
             ];
         }
     }
