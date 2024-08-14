@@ -4,6 +4,8 @@
     {
         protected Game game = Game.game;
 
+        public SceneType type;
+
         public abstract void Enter();
         public abstract void Render();
         public abstract void Input();

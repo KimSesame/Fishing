@@ -2,6 +2,8 @@
 {
     public class TitleScene : Scene
     {
+        public TitleScene() { type = SceneType.Title; }
+
         public override void Enter() { }
         public override void Exit() { }
 
