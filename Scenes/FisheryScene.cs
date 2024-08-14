@@ -44,7 +44,8 @@
 
         public void CatchFish()
         {
-            game.score++;
+            game.Score += game.fish.Patience;
+            game.FishCount++;
             game.fish = null;
         }
 
