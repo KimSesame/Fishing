@@ -4,8 +4,9 @@
     {
         int score;
 
-        public ScoreAchievement(int score)
+        public ScoreAchievement(int difficulty, int score)
         {
+            this.difficulty = difficulty;
             this.score = score;
             Game.game.OnScoreChanged += CheckAchievement;
         }
@@ -14,10 +15,23 @@
         {
             if (Game.game.Score > score)
             {
-                Console.WriteLine("Unlock!");
-                Thread.Sleep(2000);
+                PrintUnlockMsg();
+                Thread.Sleep(3000);
                 Game.game.OnScoreChanged -= CheckAchievement;
             }
+        }
+
+        public override void PrintUnlockMsg()
+        {
+            base.PrintUnlockMsg();
+
+            Console.SetCursorPosition(0, 7);
+
+            Console.SetCursorPosition(0, 8);
+            Console.WriteLine($"\t\tScore more than {score}");
+            Console.Write("\t\t");
+            for (int i = 0; i < difficulty; i++)
+                Console.Write("★  ");
         }
     }
 }

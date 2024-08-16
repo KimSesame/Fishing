@@ -4,8 +4,9 @@
     {
         int count;
 
-        public CountAchievement(int count)
+        public CountAchievement(int difficulty, int count)
         {
+            this.difficulty = difficulty;
             this.count = count;
             Game.game.OnCountChanged += CheckAchievement;
         }
@@ -14,10 +15,21 @@
         {
             if (Game.game.FishCount >= count)
             {
-                Console.WriteLine("Unlock!");
-                Thread.Sleep(2000);
+                PrintUnlockMsg();
+                Thread.Sleep(3000);
                 Game.game.OnCountChanged -= CheckAchievement;
             }
+        }
+
+        public override void PrintUnlockMsg()
+        {
+            base.PrintUnlockMsg();
+
+            Console.SetCursorPosition(0, 8);
+            Console.WriteLine($"\t\t  Catch {count} fish");
+            Console.Write("\t\t");
+            for (int i = 0; i < difficulty; i++)
+                Console.Write("★  ");
         }
     }
 }
