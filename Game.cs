@@ -8,6 +8,7 @@ namespace Fishing
         public static Game game = new Game();
 
         public event Action OnScoreChanged;
+        public event Action OnCountChanged;
 
         public bool running;
         public ConsoleKey inputKey;
@@ -36,7 +37,7 @@ namespace Fishing
             set
             {
                 fishCount = value;
-                // OnScoreChanged?.Invoke(value);
+                OnCountChanged?.Invoke();
             }
         }
 

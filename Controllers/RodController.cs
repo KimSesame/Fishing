@@ -1,6 +1,4 @@
-﻿using Fishing.Scenes;
-
-namespace Fishing.Controllers
+﻿namespace Fishing.Controllers
 {
     public class RodController : Controller
     {
